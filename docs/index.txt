@@ -3,6 +3,20 @@ MiniMock
 
 .. contents:
 
+License & Repository
+--------------------
+
+MiniMock is by `Ian Bicking <http://blog.ianbicking.org>`_ with
+substantial contributions by Mike Beachy.  It is licensed under an
+`MIT-style license
+<http://svn.colorstudy.com/MiniMock/trunk/docs/license.txt>`_.
+
+To install from the `subversion repository
+<http://svn.colorstudy.com/MiniMock/trunk/#egg=MiniMock-dev>`_ you can
+use ``easy_install MiniMock==dev`` or::
+
+    svn co http://svn.colorstudy.com/MiniMock/trunk MiniMock
+
 Introduction
 ------------
 
