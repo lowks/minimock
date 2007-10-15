@@ -1,0 +1,2 @@
+MiniMock is the simplest possible mock library.
+
