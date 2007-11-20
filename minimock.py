@@ -177,15 +177,16 @@ def restore():
 class Mock(object):
 
     def __init__(self, name, returns=None, returns_iter=None,
-                returns_func=None, raises=None):
-        self.mock_name = name
-        self.mock_returns = returns
+                 returns_func=None, raises=None, show_attrs=False):
+        object.__setattr__(self, 'mock_name', name)
+        object.__setattr__(self, 'mock_returns', returns)
         if returns_iter is not None:
             returns_iter = iter(returns_iter)
-        self.mock_returns_iter = returns_iter
-        self.mock_returns_func = returns_func
-        self.mock_raises = raises
-        self.mock_attrs = {}
+        object.__setattr__(self, 'mock_returns_iter', returns_iter)
+        object.__setattr__(self, 'mock_returns_func', returns_func)
+        object.__setattr__(self, 'mock_raises', raises)
+        object.__setattr__(self, 'mock_attrs', {})
+        object.__setattr__(self, 'mock_show_attrs', show_attrs)
 
     def __repr__(self):
         return '<Mock %s %s>' % (hex(id(self)), self.mock_name)
@@ -224,6 +225,11 @@ class Mock(object):
                 new_name = attr
             self.mock_attrs[attr] = Mock(new_name)
         return self.mock_attrs[attr]
+
+    def __setattr__(self, attr, value):
+        if self.mock_show_attrs:
+            print 'Set %s.%s = %r' % (self.name, attr, value)
+        self.mock_attrs[attr] = value
 
 __test__ = {
     "mock" :

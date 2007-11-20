@@ -85,6 +85,11 @@ start with ``mock_``, while the constructor arguments don't.
     An exception (instance or class) that will be raised when this
     object is called.
 
+``show_attrs``:
+    If this is true, everytime a new attribute is set on the mock
+    object something will be printed.  Otherwise attribute sets are
+    silent, and only function calls print something.
+
 So to create an object that always raises ValueError, do::
 
     >>> dummy_module = Mock('mylibrary')
@@ -121,3 +126,20 @@ This function looks in the calling function to figure out what to
 replace (``os.path.isfile`` in the example).  You must import the
 proper modules first.  Alternately you can pass in a dictionary like
 ``[locals(), globals()]`` for it to use for lookup.
+
+To restore all the objects mocked with ``mock()``, use
+``minimock.restore()`` (with no arguments; all the mocks are kept
+track of).
+
+News
+----
+
+svn trunk
+---------
+
+* Added ``show_attrs``
+
+0.8
+---
+
+First official release.
