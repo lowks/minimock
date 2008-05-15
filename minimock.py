@@ -177,7 +177,7 @@ def restore():
 class Mock(object):
 
     def __init__(self, name, returns=None, returns_iter=None,
-                 returns_func=None, raises=None, show_attrs=False):
+                 returns_func=None, raises=None, show_attrs=False, **kw):
         object.__setattr__(self, 'mock_name', name)
         object.__setattr__(self, 'mock_returns', returns)
         if returns_iter is not None:
@@ -185,7 +185,7 @@ class Mock(object):
         object.__setattr__(self, 'mock_returns_iter', returns_iter)
         object.__setattr__(self, 'mock_returns_func', returns_func)
         object.__setattr__(self, 'mock_raises', raises)
-        object.__setattr__(self, 'mock_attrs', {})
+        object.__setattr__(self, 'mock_attrs', kw)
         object.__setattr__(self, 'mock_show_attrs', show_attrs)
 
     def __repr__(self):
