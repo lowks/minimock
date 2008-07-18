@@ -134,8 +134,8 @@ track of).
 News
 ----
 
-svn trunk
----------
+0.9
+---
 
 * Added ``show_attrs``
 
