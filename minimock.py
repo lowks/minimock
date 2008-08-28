@@ -227,9 +227,12 @@ class Mock(object):
         return self.mock_attrs[attr]
 
     def __setattr__(self, attr, value):
-        if self.mock_show_attrs:
-            print 'Set %s.%s = %r' % (self.name, attr, value)
-        self.mock_attrs[attr] = value
+        if attr in ["mock_raises", "mock_returns", "mock_returns_func", "mock_returns_iter", "mock_returns_func", "show_attrs"]:
+            object.__setattr__(self, attr, value)
+        else:
+            if self.mock_show_attrs:
+                print 'Set %s.%s = %r' % (self.name, attr, value)
+            self.mock_attrs[attr] = value 
 
 __test__ = {
     "mock" :
