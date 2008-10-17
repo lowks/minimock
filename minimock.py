@@ -40,6 +40,7 @@ implementation is simple because most of the work is done by doctest.
 
 __all__ = ["mock", "restore", "Mock"]
 
+import sys
 import inspect
 
 # A list of mocked objects. Each item is a tuple of (original object,
@@ -174,10 +175,31 @@ def restore():
             setattr(tmp, attrs[-1], original)
     return
 
+class Printer(object):
+    """Prints all calls to the file it's instantiated with.
+    Can take any object that implements `write'.
+    """
+    def __init__(self, file):
+        self.file = file
+
+    def call(self, func_name, *args, **kw):
+        parts = [repr(a) for a in args]
+        parts.extend(
+            '%s=%r' % (items) for items in sorted(kw.items()))
+        msg = 'Called %s(%s)' % (func_name, ', '.join(parts))
+        if len(msg) > 80:
+            msg = 'Called %s(\n    %s)' % (
+                func_name, ',\n    '.join(parts))
+        print >> self.file, msg
+
+    def set(self, obj_name, attr, value): 
+        print >> self.file, 'Set %s.%s = %r' % (obj_name, attr, value)
+
 class Mock(object):
 
     def __init__(self, name, returns=None, returns_iter=None,
-                 returns_func=None, raises=None, show_attrs=False, **kw):
+                 returns_func=None, raises=None, show_attrs=False,
+                 tracker=None, **kw):
         object.__setattr__(self, 'mock_name', name)
         object.__setattr__(self, 'mock_returns', returns)
         if returns_iter is not None:
@@ -187,19 +209,15 @@ class Mock(object):
         object.__setattr__(self, 'mock_raises', raises)
         object.__setattr__(self, 'mock_attrs', kw)
         object.__setattr__(self, 'mock_show_attrs', show_attrs)
+        if tracker is None:
+            tracker = Printer(sys.stdout)
+        object.__setattr__(self, 'mock_tracker', tracker)
 
     def __repr__(self):
         return '<Mock %s %s>' % (hex(id(self)), self.mock_name)
 
     def __call__(self, *args, **kw):
-        parts = [repr(a) for a in args]
-        parts.extend(
-            '%s=%r' % (items) for items in sorted(kw.items()))
-        msg = 'Called %s(%s)' % (self.mock_name, ', '.join(parts))
-        if len(msg) > 80:
-            msg = 'Called %s(\n    %s)' % (
-                self.mock_name, ',\n    '.join(parts))
-        print msg
+        self.mock_tracker.call(self.mock_name, *args, **kw)
         return self._mock_return(*args, **kw)
 
     def _mock_return(self, *args, **kw):
@@ -223,7 +241,9 @@ class Mock(object):
                 new_name = self.mock_name + '.' + attr
             else:
                 new_name = attr
-            self.mock_attrs[attr] = Mock(new_name)
+            self.mock_attrs[attr] = Mock(new_name,
+                show_attrs=self.mock_show_attrs,
+                tracker=self.mock_tracker)
         return self.mock_attrs[attr]
 
     def __setattr__(self, attr, value):
@@ -231,7 +251,7 @@ class Mock(object):
             object.__setattr__(self, attr, value)
         else:
             if self.mock_show_attrs:
-                print 'Set %s.%s = %r' % (self.name, attr, value)
+                self.mock_tracker.set(self.name, attr, value)
             self.mock_attrs[attr] = value 
 
 __test__ = {

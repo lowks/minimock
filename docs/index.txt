@@ -140,6 +140,9 @@ svn trunk
 * Fixed setting special attributes like ``mock_returns`` on
   already-created Mock objects (from Toby White)
 
+* Separated out printing to a class that accepts call information
+  and provided an implementation that prints calls to a file.
+
 0.9
 ---
 
