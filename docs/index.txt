@@ -134,8 +134,8 @@ track of).
 News
 ----
 
-svn trunk
----------
+1.0
+---
 
 * Fixed setting special attributes like ``mock_returns`` on
   already-created Mock objects (from Toby White)
