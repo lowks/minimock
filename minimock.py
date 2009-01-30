@@ -1,4 +1,4 @@
-# (c) 2006 Ian Bicking, Mike Beachy, and contributors
+# (c) 2006-2009 Ian Bicking, Mike Beachy, and contributors
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 r"""
 minimock is a simple library for doing Mock objects with doctest.
@@ -158,7 +158,6 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
 def restore():
     """
     Restore all mocked objects.
-
     """
     global mocked
 
@@ -175,7 +174,17 @@ def restore():
             setattr(tmp, attrs[-1], original)
     return
 
-class Printer(object):
+class AbstractTracker(object):
+    def __init__(self, *args, **kw):
+        raise NotImplementedError
+
+    def call(self, *args, **kw):
+        raise NotImplementedError
+
+    def set(self, *args, **kw):
+        raise NotImplementedError
+
+class Printer(AbstractTracker):
     """Prints all calls to the file it's instantiated with.
     Can take any object that implements `write'.
     """
@@ -194,6 +203,66 @@ class Printer(object):
 
     def set(self, obj_name, attr, value): 
         print >> self.file, 'Set %s.%s = %r' % (obj_name, attr, value)
+
+
+class MockTracker(AbstractTracker):
+    """Maintains a record of method calls and attributes assignments on a
+    particular minimock object.
+
+    MockTracker offers a more convenient way to check for the expected usage
+    of mocked objects when not using :mod:`minimock` in a :mod:`doctest`
+    scenario, via the :attr:`mock_calls` and :attr:`mock_sets` attributes.
+    
+    .. attribute:: MockTracker.mock_calls
+    
+    A chonologically ordered list of mocked method invocations.
+    Each method call is represented by a 3-tuple:
+    
+    * the mocked object's name
+    * positional arguments
+    * keyword arguments
+    
+    .. attribute:: MockTracker.mock_sets
+    
+    An ordered list of mocked attribute assignments.
+    Attribute assigments are represented by a 3-tuple:
+    
+    * the mocked object's name
+    * the attribute name being set
+    * the new attribute value
+    
+    Usage::
+  
+        >>> import smtplib
+        >>> def send_email(from_addr, to_addr, subject, body):
+        ...     conn = smtplib.SMTP('localhost')
+        ...     msg = 'To: %s\\nFrom: %s\\nSubject: %s\\n\\n%s' % (
+        ...         to_addr, from_addr, subject, body)
+        ...     conn.sendmail(from_addr, [to_addr], msg)
+        ...     conn.quit()
+        ...
+        >>> from minimock import Mock
+        >>> smtplib.SMTP = Mock('smtplib.SMTP')
+        >>> smtp_conn_tracker = MockTracker()
+        >>> smtplib.SMTP.mock_returns = Mock('smtp_conn', tracker=smtp_conn_tracker)
+        >>>
+        >>> send_email('ianb@colorstudy.com', 'joe@example.com',
+        ...            'Hi there!', 'How is it going?')
+        Called smtplib.SMTP('localhost')
+        >>>
+        >>> [call[0] for call in smtp_conn_tracker.mock_calls]
+        ['smtp_conn.sendmail', 'smtp_conn.quit']
+    """
+    def __init__(self):
+        self.mock_calls = []
+        self.mock_sets =  []
+
+    def call(self, func_name, *args, **kw):
+        self.mock_calls.append((func_name, args, kw))
+
+    def set(self, obj_name, attr, value):
+        self.mock_sets.append((obj_name, attr, value))
+
 
 class Mock(object):
 

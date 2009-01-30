@@ -11,11 +11,11 @@ substantial contributions by Mike Beachy.  It is licensed under an
 `MIT-style license
 <http://svn.colorstudy.com/MiniMock/trunk/docs/license.txt>`_.
 
-To install from the `subversion repository
+It has a `subversion repository
 <http://svn.colorstudy.com/MiniMock/trunk/#egg=MiniMock-dev>`_ you can
-use ``easy_install MiniMock==dev`` or::
-
-    svn co http://svn.colorstudy.com/MiniMock/trunk MiniMock
+install from with ``easy_install MiniMock==dev`` and a `Google Group
+<http://groups.google.com/group/minimock-dev>`_ you can email at
+`minimock-dev@googlegroups.com <mailto:minimock-dev@googlegroups.com>`_.
 
 Introduction
 ------------
@@ -133,6 +133,11 @@ track of).
 
 News
 ----
+
+1.1
+---
+
+* Added MockTracker for use with unittests rather than doctests (from James)
 
 1.0
 ---
