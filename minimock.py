@@ -133,7 +133,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
             # stack[1][0] is the frame object of the caller to this function
             globals_ = stack[1][0].f_globals
             locals_ = stack[1][0].f_locals
-            nsdicts = (locals_, globals_)
+            nsdicts = (locals_, globals_, __builtins__)
         finally:
             del(stack)
 
