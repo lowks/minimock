@@ -38,10 +38,15 @@ constructor).  These are all the core parts of a mock library.  The
 implementation is simple because most of the work is done by doctest.
 """
 
-__all__ = ["mock", "restore", "Mock"]
+__all__ = ["mock", "restore", "Mock", "TraceTracker", "assert_same_trace"]
 
 import sys
 import inspect
+import doctest
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 # A list of mocked objects. Each item is a tuple of (original object,
 # namespace dict, object name, and a list of object attributes).
@@ -174,6 +179,30 @@ def restore():
             setattr(tmp, attrs[-1], original)
     return
 
+def assert_same_trace(tracker, want):
+    r"""
+    Check that the mock objects using ``tracker`` have been used as expected.
+    
+    :param tracker: a :class:`TraceTracker` instance
+    :param want: the expected :class:`Printer` output
+    :type want: string
+    :raises: :exc:`AssertionError` if the expected and observed outputs don't
+        match
+    
+    Example::
+    
+            >>> tt = TraceTracker()
+            >>> m = Mock('mock_obj', tracker=tt)
+            >>> m.some_meth('dummy argument')
+            >>> assert_same_trace(tt,
+            ...     "Called mock_obj.some_meth('dummy argument')\n")
+            >>> assert_same_trace(tt, "Non-matching trace")
+            Traceback (most recent call last):
+            ...
+            AssertionError...
+    """
+    assert tracker.check(want), tracker.diff(want)
+    
 class AbstractTracker(object):
     def __init__(self, *args, **kw):
         raise NotImplementedError
@@ -262,6 +291,89 @@ class MockTracker(AbstractTracker):
 
     def set(self, obj_name, attr, value):
         self.mock_sets.append((obj_name, attr, value))
+        
+class TraceTracker(Printer):
+    """
+    :class:`AbstractTracker` implementation for using MiniMock in non-
+    :mod:`doctest` tests. Alternative to :class:`MockTracker` which more
+    closely follows the pattern of recording minimock-ed object usage as
+    strings, then using the facilities of :mod:`doctest` to assert the
+    correctness of these usage strings.
+    
+    
+    """
+    def __init__(self, *args, **kw):
+        self.out = StringIO()
+        super(TraceTracker, self).__init__(self.out, *args, **kw)
+        self.checker = doctest.OutputChecker()
+        self.options =  doctest.ELLIPSIS
+        self.options |= doctest.NORMALIZE_WHITESPACE
+        self.options |= doctest.REPORT_UDIFF
+        
+    def check(self, want):
+        """
+        Compare observed MiniMock usage with that which we expected.
+        
+        :param want: the :class:`Printer` output that results from expected
+            usage of mocked objects
+        :type want: string
+        :rtype: a ``True`` value if the check passed, ``False`` otherwise
+        
+        Example::
+        
+            >>> tt = TraceTracker()
+            >>> m = Mock('mock_obj', tracker=tt)
+            >>> m.some_meth('dummy argument')
+            >>> tt.check("Called mock_obj.some_meth('dummy argument')")
+            True
+            >>> tt.check("Failing expected trace")
+            False
+        """
+        return self.checker.check_output(want, self.dump(),
+            optionflags=self.options)
+        
+    def diff(self, want):
+        r"""
+        Analyse differences between observed MiniMock usage and that which
+        we expected, if any.
+        
+        :param want: the :class:`Printer` output that results from expected
+            usage of mocked objects
+        :type want: string
+        :rtype: a string summary of differences between the observed usage and
+            the ``want`` parameter
+        
+        Example::
+        
+            >>> tt = TraceTracker()
+            >>> m = Mock('mock_obj', tracker=tt)
+            >>> m.some_meth('dummy argument')
+            >>> tt.diff("Dummy string")
+            "Expected:\n    Dummy string\nGot:\n    Called mock_obj.some_meth('dummy argument')\n"
+            >>> tt.diff("Called mock_obj.some_meth('dummy argument')\n")
+            ''
+        """
+        if self.check(want):
+            # doctest's output_difference always returns a diff, even if
+            # there's no difference: short circuit that feature.
+            return ''
+        else:
+            return self.checker.output_difference(doctest.Example("", want),
+                self.dump(), optionflags=self.options)
+        
+    def dump(self):
+        r"""
+        Return the MiniMock object usage so far.
+        
+        Example::
+        
+            >>> tt = TraceTracker()
+            >>> m = Mock('mock_obj', tracker=tt)
+            >>> m.some_meth('dummy argument')
+            >>> tt.dump()
+            "Called mock_obj.some_meth('dummy argument')\n"
+        """
+        return self.out.getvalue()
 
 
 class Mock(object):
