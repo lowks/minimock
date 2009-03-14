@@ -134,16 +134,21 @@ track of).
 News
 ----
 
+1.2
+---
+
+* Added TraceTracker, a better Tracker to use with unittests (James Brady)
+
 1.1
 ---
 
-* Added MockTracker for use with unittests rather than doctests (from James)
+* Added MockTracker for use with unittests rather than doctests (James Brady)
 
 1.0
 ---
 
 * Fixed setting special attributes like ``mock_returns`` on
-  already-created Mock objects (from Toby White)
+  already-created Mock objects (Toby White)
 
 * Separated out printing to a class that accepts call information
   and provided an implementation that prints calls to a file.
