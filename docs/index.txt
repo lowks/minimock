@@ -134,6 +134,11 @@ track of).
 News
 ----
 
+1.2.1
+---
+
+* Allow mocking of built-in functions.
+
 1.2
 ---
 
