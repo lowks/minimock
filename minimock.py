@@ -40,6 +40,7 @@ implementation is simple because most of the work is done by doctest.
 
 __all__ = ["mock", "restore", "Mock", "TraceTracker", "assert_same_trace"]
 
+import __builtin__
 import sys
 import inspect
 import doctest
@@ -98,7 +99,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
     Mock the named object, placing a Mock instance in the correct namespace
     dictionary. If no iterable of namespace dicts is provided, use
     introspection to get the locals and globals of the caller of this
-    function.
+    function, as well as __builtin__.__dict__ to allow mocking built-ins.
 
     All additional keyword args are passed on to the Mock object
     initializer.
@@ -131,6 +132,12 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         >>> isfile_id == id(os.path.isfile)
         True
 
+    Test mocking a built-in function:
+        >>> mock("raw_input", returns="okay")
+        >>> raw_input()
+        Called raw_input()
+        'okay'
+
     """
     if nsdicts is None:
         stack = inspect.stack()
@@ -138,7 +145,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
             # stack[1][0] is the frame object of the caller to this function
             globals_ = stack[1][0].f_globals
             locals_ = stack[1][0].f_locals
-            nsdicts = (locals_, globals_, __builtins__)
+            nsdicts = (locals_, globals_, __builtin__.__dict__)
         finally:
             del(stack)
 
