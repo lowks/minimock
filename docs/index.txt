@@ -1,8 +1,10 @@
 MiniMock
 ========
 
-.. contents:
+..  contents::
+    :depth: 1
 
+--------------------
 License & Repository
 --------------------
 
@@ -17,6 +19,7 @@ install from with ``easy_install MiniMock==dev`` and a `Google Group
 <http://groups.google.com/group/minimock-dev>`_ you can email at
 `minimock-dev@googlegroups.com <mailto:minimock-dev@googlegroups.com>`_.
 
+------------
 Introduction
 ------------
 
@@ -56,6 +59,7 @@ got.  We've provided fake return calls (for the ``smtplib.SMTP()``
 constructor).  These are all the core parts of a mock library.  The
 implementation is simple because most of the work is done by doctest.
 
+-----------------
 Controlling Mocks
 -----------------
 
@@ -95,6 +99,7 @@ So to create an object that always raises ValueError, do::
     >>> dummy_module = Mock('mylibrary')
     >>> dummy_module.invalid_func.raises = ValueError
 
+--------------
 Creating Mocks
 --------------
 
@@ -131,39 +136,17 @@ To restore all the objects mocked with ``mock()``, use
 ``minimock.restore()`` (with no arguments; all the mocks are kept
 track of).
 
+----
 News
 ----
 
-1.2.1
----
+..  include:: changelog.txt
 
-* Allow mocking of built-in functions.
 
-1.2
----
-
-* Added TraceTracker, a better Tracker to use with unittests (James Brady)
-
-1.1
----
-
-* Added MockTracker for use with unittests rather than doctests (James Brady)
-
-1.0
----
-
-* Fixed setting special attributes like ``mock_returns`` on
-  already-created Mock objects (Toby White)
-
-* Separated out printing to a class that accepts call information
-  and provided an implementation that prints calls to a file.
-
-0.9
----
-
-* Added ``show_attrs``
-
-0.8
----
-
-First official release.
+
+..
+    Local variables:
+    mode: rst
+    coding: utf-8
+    End:
+    vim: filetype=rst fileencoding=utf-8 :
