@@ -44,6 +44,8 @@ import __builtin__
 import sys
 import inspect
 import doctest
+import re
+import textwrap
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -312,13 +314,14 @@ class TraceTracker(Printer):
     def __init__(self, *args, **kw):
         self.out = StringIO()
         super(TraceTracker, self).__init__(self.out, *args, **kw)
-        self.checker = doctest.OutputChecker()
+        self.checker = MinimockOutputChecker()
         self.options =  doctest.ELLIPSIS
-        self.options |= doctest.NORMALIZE_WHITESPACE
+        self.options |= doctest.NORMALIZE_INDENTATION
+        self.options |= doctest.NORMALIZE_FUNCTION_PARAMETERS
         self.options |= doctest.REPORT_UDIFF
         
     def check(self, want):
-        """
+        r"""
         Compare observed MiniMock usage with that which we expected.
         
         :param want: the :class:`Printer` output that results from expected
@@ -331,7 +334,7 @@ class TraceTracker(Printer):
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('dummy argument')
-            >>> tt.check("Called mock_obj.some_meth('dummy argument')")
+            >>> tt.check("Called mock_obj.some_meth('dummy argument')\n")
             True
             >>> tt.check("Failing expected trace")
             False
@@ -381,6 +384,77 @@ class TraceTracker(Printer):
             "Called mock_obj.some_meth('dummy argument')\n"
         """
         return self.out.getvalue()
+
+
+def normalize_function_parameters(text):
+    r"""
+    Return a version of ``text`` with function parameters normalized.
+
+        The normalisations performed are:
+
+        * Remove any whitespace sequence between an opening
+          parenthesis '(' and a subsequent non-whitespace character.
+
+        * Remove any whitespace sequence between a non-whitespace
+          character and a closing parenthesis ')'.
+
+        * Ensure a comma ',' and a subsequent non-whitespace character
+          are separated by a single space ' '.
+
+    Example::
+        
+        >>> mock_tracker = TraceTracker()
+        >>> mock_foo = Mock("foo", tracker=mock_tracker)
+        >>> expect_mock_output = '''\
+        ...     Called foo.bar('baz')
+        ...     '''
+        >>> mock_foo.bar('baz')
+        >>> mock_tracker.check(expect_mock_output)
+        True
+        >>> mock_tracker.out.truncate(0)
+        >>> expect_mock_output = '''\
+        ...     Called foo.bar(
+        ...         'baz')
+        ...     '''
+        >>> mock_foo.bar('baz')
+        >>> mock_tracker.check(expect_mock_output)
+        True
+        >>> mock_tracker.out.truncate(0)
+    """
+    normalized_text = text
+    normalize_map = {
+        re.compile(r"\(\s+(\S)"): r"(\1",
+        re.compile(r"(\S)\s+\)"): r"\1)",
+        re.compile(r",\s*(\S)"): r", \1",
+        }
+    for search_pattern, replace_pattern in normalize_map.items():
+        normalized_text = re.sub(
+            search_pattern, replace_pattern, normalized_text)
+
+    return normalized_text
+
+
+doctest.NORMALIZE_INDENTATION = (
+    doctest.register_optionflag('NORMALIZE_INDENTATION'))
+doctest.NORMALIZE_FUNCTION_PARAMETERS = (
+    doctest.register_optionflag('NORMALIZE_FUNCTION_PARAMETERS'))
+
+
+class MinimockOutputChecker(doctest.OutputChecker, object):
+    """Class for matching output of MiniMock objects against expectations.
+    """
+
+    def check_output(self, want, got, optionflags):
+        if (optionflags & doctest.NORMALIZE_INDENTATION):
+            want = textwrap.dedent(want)
+            got = textwrap.dedent(got)
+        if (optionflags & doctest.NORMALIZE_FUNCTION_PARAMETERS):
+            want = normalize_function_parameters(want)
+            got = normalize_function_parameters(got)
+        output_match = super(MinimockOutputChecker, self).check_output(
+            want, got, optionflags)
+        return output_match
+    check_output.__doc__ = doctest.OutputChecker.check_output.__doc__
 
 
 class Mock(object):
