@@ -1,3 +1,10 @@
+1.2.2
+-----
+
+* Added ``MinimockOutputChecker`` which normalizes whitespace in function call
+  traces; ``TraceTracker`` now uses this instead of ``doctest.OutputChecker``
+  (Ben Finney)
+
 1.2.1
 -----
 
@@ -6,12 +13,12 @@
 1.2
 ---
 
-* Added TraceTracker, a better Tracker to use with unittests (James Brady)
+* Added ``TraceTracker``, a better ``Tracker`` to use with unittests (James Brady)
 
 1.1
 ---
 
-* Added MockTracker for use with unittests rather than doctests (James Brady)
+* Added ``MockTracker`` for use with unittests rather than doctests (James Brady)
 
 1.0
 ---
