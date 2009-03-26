@@ -293,7 +293,7 @@ class MockTracker(AbstractTracker):
     """
     def __init__(self):
         self.mock_calls = []
-        self.mock_sets =  []
+        self.mock_sets = []
 
     def call(self, func_name, *args, **kw):
         self.mock_calls.append((func_name, args, kw))
@@ -308,8 +308,6 @@ class TraceTracker(Printer):
     closely follows the pattern of recording minimock-ed object usage as
     strings, then using the facilities of :mod:`doctest` to assert the
     correctness of these usage strings.
-    
-    
     """
     def __init__(self, *args, **kw):
         self.out = StringIO()
@@ -333,10 +331,12 @@ class TraceTracker(Printer):
         
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
-            >>> m.some_meth('dummy argument')
-            >>> tt.check("Called mock_obj.some_meth('dummy argument')\n")
+            >>> m.some_meth('arg1')
+            >>> tt.check("Called mock_obj.some_meth('arg1')")
             True
-            >>> tt.check("Failing expected trace")
+            >>> tt.clear()
+            >>> m.some_meth('arg2')
+            >>> tt.check("does not match")
             False
         """
         return self.checker.check_output(want, self.dump(),
@@ -358,9 +358,9 @@ class TraceTracker(Printer):
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('dummy argument')
-            >>> tt.diff("Dummy string")
-            "Expected:\n    Dummy string\nGot:\n    Called mock_obj.some_meth('dummy argument')\n"
-            >>> tt.diff("Called mock_obj.some_meth('dummy argument')\n")
+            >>> tt.diff("does not match")
+            "Expected:\n    does not match\nGot:\n    Called mock_obj.some_meth('dummy argument')\n"
+            >>> tt.diff("Called mock_obj.some_meth('dummy argument')")
             ''
         """
         if self.check(want):
@@ -385,6 +385,9 @@ class TraceTracker(Printer):
         """
         return self.out.getvalue()
 
+    def clear(self):
+        self.out.truncate(0)
+
 
 def normalize_function_parameters(text):
     r"""
@@ -403,23 +406,22 @@ def normalize_function_parameters(text):
 
     Example::
         
-        >>> mock_tracker = TraceTracker()
-        >>> mock_foo = Mock("foo", tracker=mock_tracker)
+        >>> tt = TraceTracker()
+        >>> foo = Mock("foo", tracker=tt)
         >>> expect_mock_output = '''\
         ...     Called foo.bar('baz')
         ...     '''
-        >>> mock_foo.bar('baz')
-        >>> mock_tracker.check(expect_mock_output)
+        >>> foo.bar('baz')
+        >>> tt.check(expect_mock_output)
         True
-        >>> mock_tracker.out.truncate(0)
+        >>> tt.clear()
         >>> expect_mock_output = '''\
         ...     Called foo.bar(
         ...         'baz')
         ...     '''
-        >>> mock_foo.bar('baz')
-        >>> mock_tracker.check(expect_mock_output)
+        >>> foo.bar('baz')
+        >>> tt.check(expect_mock_output)
         True
-        >>> mock_tracker.out.truncate(0)
     """
     normalized_text = text
     normalize_map = {
@@ -446,8 +448,8 @@ class MinimockOutputChecker(doctest.OutputChecker, object):
 
     def check_output(self, want, got, optionflags):
         if (optionflags & doctest.NORMALIZE_INDENTATION):
-            want = textwrap.dedent(want)
-            got = textwrap.dedent(got)
+            want = textwrap.dedent(want).rstrip()
+            got = textwrap.dedent(got).rstrip()
         if (optionflags & doctest.NORMALIZE_FUNCTION_PARAMETERS):
             want = normalize_function_parameters(want)
             got = normalize_function_parameters(got)
