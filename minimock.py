@@ -386,6 +386,8 @@ class TraceTracker(Printer):
         return self.out.getvalue()
 
     def clear(self):
+        """Clear the MiniMock object usage that has been tracked so far.
+        """
         self.out.truncate(0)
 
 
