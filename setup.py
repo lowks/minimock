@@ -4,8 +4,8 @@ import sys, os
 version = '1.2.3'
 
 doc_dir = os.path.join(os.path.dirname(__file__), 'docs')
-index = open(os.path.join(doc_dir, 'index.txt')).read().strip()
-changelog = open(os.path.join(doc_dir, 'changelog.txt')).read().strip()
+index = open(os.path.join(doc_dir, 'index.txt')).read()
+changelog = open(os.path.join(doc_dir, 'changelog.txt')).read()
 long_description = '\n'.join((index, changelog))
 
 setup(name='MiniMock',

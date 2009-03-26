@@ -43,10 +43,3 @@ News
 ---
 
 First official release.
-
-..
-    Local variables:
-    mode: rst
-    coding: utf-8
-    End:
-    vim: filetype=rst fileencoding=utf-8 :

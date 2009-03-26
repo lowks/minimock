@@ -135,15 +135,3 @@ proper modules first.  Alternately you can pass in a dictionary like
 To restore all the objects mocked with ``mock()``, use
 ``minimock.restore()`` (with no arguments; all the mocks are kept
 track of).
-
-..  
-    include:: changelog.txt
-    this causes problems on PyPI; changelog included
-    programmatically in setup.py instead
-
-..
-    Local variables:
-    mode: rst
-    coding: utf-8
-    End:
-    vim: filetype=rst fileencoding=utf-8 :
