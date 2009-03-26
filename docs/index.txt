@@ -136,14 +136,11 @@ To restore all the objects mocked with ``mock()``, use
 ``minimock.restore()`` (with no arguments; all the mocks are kept
 track of).
 
-----
-News
-----
+..  
+    include:: changelog.txt
+    this causes problems on PyPI; changelog included
+    programmatically in setup.py instead
 
-..  include:: changelog.txt
-
-
-
 ..
     Local variables:
     mode: rst
