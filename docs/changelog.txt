@@ -2,6 +2,12 @@
 News
 ----
 
+trunk
+-----
+
+* Explicitly passing ``tracker=None`` to the ``Mock`` constructor now
+  suppresses tracking. If ``tracker`` is not passed it will still use
+  ``Printer(sys.stdout)`` as before.
 
 1.2.2
 -----

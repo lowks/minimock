@@ -461,11 +461,17 @@ class MinimockOutputChecker(doctest.OutputChecker, object):
     check_output.__doc__ = doctest.OutputChecker.check_output.__doc__
 
 
+class _DefaultTracker(object):
+    def __repr__(self):
+        return '(default tracker)'
+DefaultTracker = _DefaultTracker()
+del _DefaultTracker
+
 class Mock(object):
 
     def __init__(self, name, returns=None, returns_iter=None,
                  returns_func=None, raises=None, show_attrs=False,
-                 tracker=None, **kw):
+                 tracker=DefaultTracker, **kw):
         object.__setattr__(self, 'mock_name', name)
         object.__setattr__(self, 'mock_returns', returns)
         if returns_iter is not None:
@@ -475,7 +481,7 @@ class Mock(object):
         object.__setattr__(self, 'mock_raises', raises)
         object.__setattr__(self, 'mock_attrs', kw)
         object.__setattr__(self, 'mock_show_attrs', show_attrs)
-        if tracker is None:
+        if tracker is DefaultTracker:
             tracker = Printer(sys.stdout)
         object.__setattr__(self, 'mock_tracker', tracker)
 
@@ -483,7 +489,8 @@ class Mock(object):
         return '<Mock %s %s>' % (hex(id(self)), self.mock_name)
 
     def __call__(self, *args, **kw):
-        self.mock_tracker.call(self.mock_name, *args, **kw)
+        if self.mock_tracker is not None:
+            self.mock_tracker.call(self.mock_name, *args, **kw)
         return self._mock_return(*args, **kw)
 
     def _mock_return(self, *args, **kw):
@@ -516,7 +523,7 @@ class Mock(object):
         if attr in ["mock_raises", "mock_returns", "mock_returns_func", "mock_returns_iter", "mock_returns_func", "show_attrs"]:
             object.__setattr__(self, attr, value)
         else:
-            if self.mock_show_attrs:
+            if self.mock_show_attrs and self.mock_tracker is not None:
                 self.mock_tracker.set(self.name, attr, value)
             self.mock_attrs[attr] = value 
 
