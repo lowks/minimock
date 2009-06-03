@@ -9,8 +9,8 @@ License & Repository
 --------------------
 
 MiniMock is by `Ian Bicking <http://blog.ianbicking.org>`_ with
-substantial contributions by Mike Beachy.  It is licensed under an
-`MIT-style license
+substantial contributions by Mike Beachy, and is maintained by Josh
+Bronson.  It is licensed under an `MIT-style license
 <http://svn.colorstudy.com/MiniMock/trunk/docs/license.txt>`_.
 
 It has a `subversion repository
