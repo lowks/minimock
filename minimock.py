@@ -529,7 +529,7 @@ class Mock(object):
             object.__setattr__(self, attr, value)
         else:
             if self.mock_show_attrs and self.mock_tracker is not None:
-                self.mock_tracker.set(self.name, attr, value)
+                self.mock_tracker.set(self.mock_name, attr, value)
             self.mock_attrs[attr] = value 
 
 __test__ = {
