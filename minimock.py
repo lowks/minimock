@@ -240,6 +240,11 @@ class Printer(AbstractTracker):
         print >> self.file, msg
 
     def set(self, obj_name, attr, value): 
+        """
+        >>> z = Mock('z', show_attrs=True)
+        >>> z.a = 2
+        Set z.a = 2
+        """
         print >> self.file, 'Set %s.%s = %r' % (obj_name, attr, value)
 
 
