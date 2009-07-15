@@ -9,14 +9,15 @@ License & Repository
 --------------------
 
 MiniMock is by `Ian Bicking <http://blog.ianbicking.org>`_ with
-substantial contributions by Mike Beachy, and is maintained by Josh
-Bronson.  It is licensed under an `MIT-style license
+substantial contributions by Mike Beachy, and is maintained by `Josh
+Bronson <http://joshbronson.org>`_.  It is licensed under an `MIT-style license
 <http://svn.colorstudy.com/MiniMock/trunk/docs/license.txt>`_.
 
 It has a `subversion repository
 <http://svn.colorstudy.com/MiniMock/trunk/#egg=MiniMock-dev>`_ you can
-install from with ``easy_install MiniMock==dev`` and a `Google Group
-<http://groups.google.com/group/minimock-dev>`_ you can email at
+install from with ``easy_install MiniMock==dev`` and a development mailing
+list in the form of a `Google Group
+<http://groups.google.com/group/minimock-dev>`_ which you can email at
 `minimock-dev@googlegroups.com <mailto:minimock-dev@googlegroups.com>`_.
 
 ------------

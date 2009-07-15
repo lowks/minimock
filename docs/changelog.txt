@@ -2,6 +2,10 @@
 News
 ----
 
+trunk
+-----
+* 
+
 1.2.4
 -----
 * Fix show_attrs=True bug (Kendrick Shaw)
