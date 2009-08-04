@@ -4,7 +4,8 @@ News
 
 trunk
 -----
-* 
+
+* Deprecate ``MockTracker``. ``TraceTracker`` should be used instead.
 
 1.2.4
 -----

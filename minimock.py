@@ -246,73 +246,13 @@ class Printer(AbstractTracker):
         Set z.a = 2
         """
         print >> self.file, 'Set %s.%s = %r' % (obj_name, attr, value)
-
-
-class MockTracker(AbstractTracker):
-    """Maintains a record of method calls and attributes assignments on a
-    particular minimock object.
-
-    MockTracker offers a more convenient way to check for the expected usage
-    of mocked objects when not using :mod:`minimock` in a :mod:`doctest`
-    scenario, via the :attr:`mock_calls` and :attr:`mock_sets` attributes.
-    
-    .. attribute:: MockTracker.mock_calls
-    
-    A chonologically ordered list of mocked method invocations.
-    Each method call is represented by a 3-tuple:
-    
-    * the mocked object's name
-    * positional arguments
-    * keyword arguments
-    
-    .. attribute:: MockTracker.mock_sets
-    
-    An ordered list of mocked attribute assignments.
-    Attribute assigments are represented by a 3-tuple:
-    
-    * the mocked object's name
-    * the attribute name being set
-    * the new attribute value
-    
-    Usage::
-  
-        >>> import smtplib
-        >>> def send_email(from_addr, to_addr, subject, body):
-        ...     conn = smtplib.SMTP('localhost')
-        ...     msg = 'To: %s\\nFrom: %s\\nSubject: %s\\n\\n%s' % (
-        ...         to_addr, from_addr, subject, body)
-        ...     conn.sendmail(from_addr, [to_addr], msg)
-        ...     conn.quit()
-        ...
-        >>> from minimock import Mock
-        >>> smtplib.SMTP = Mock('smtplib.SMTP')
-        >>> smtp_conn_tracker = MockTracker()
-        >>> smtplib.SMTP.mock_returns = Mock('smtp_conn', tracker=smtp_conn_tracker)
-        >>>
-        >>> send_email('ianb@colorstudy.com', 'joe@example.com',
-        ...            'Hi there!', 'How is it going?')
-        Called smtplib.SMTP('localhost')
-        >>>
-        >>> [call[0] for call in smtp_conn_tracker.mock_calls]
-        ['smtp_conn.sendmail', 'smtp_conn.quit']
-    """
-    def __init__(self):
-        self.mock_calls = []
-        self.mock_sets = []
-
-    def call(self, func_name, *args, **kw):
-        self.mock_calls.append((func_name, args, kw))
-
-    def set(self, obj_name, attr, value):
-        self.mock_sets.append((obj_name, attr, value))
         
 class TraceTracker(Printer):
     """
     :class:`AbstractTracker` implementation for using MiniMock in non-
-    :mod:`doctest` tests. Alternative to :class:`MockTracker` which more
-    closely follows the pattern of recording minimock-ed object usage as
-    strings, then using the facilities of :mod:`doctest` to assert the
-    correctness of these usage strings.
+    :mod:`doctest` tests. Follows the pattern of recording minimocked
+    object usage as strings, then using the facilities of :mod:`doctest`
+    to assert the correctness of these usage strings.
     """
     def __init__(self, *args, **kw):
         self.out = StringIO()
