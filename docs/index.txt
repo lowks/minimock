@@ -86,7 +86,7 @@ start with ``mock_``, while the constructor arguments don't.
     essence, this function will be the *real* implementation of the
     method.
 
-``raises``:
+``mock_raises``:
     An exception (instance or class) that will be raised when this
     object is called.
 
