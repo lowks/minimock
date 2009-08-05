@@ -98,7 +98,7 @@ start with ``mock_``, while the constructor arguments don't.
 So to create an object that always raises ValueError, do::
 
     >>> dummy_module = Mock('mylibrary')
-    >>> dummy_module.invalid_func.raises = ValueError
+    >>> dummy_module.invalid_func.mock_raises = ValueError
 
 --------------
 Creating Mocks
