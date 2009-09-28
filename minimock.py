@@ -158,6 +158,14 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
 
     # Get the original object and replace it with the mock object.
     tmp = nsdict[obj_name]
+
+    # if run from a doctest, nsdict may point to a *copy* of the
+    # global namespace, so instead use tmp.func_globals if present.
+    # we use isinstance(gettattr(...), dict) rather than hasattr
+    # because if tmp is itself a mock object, tmp.func_globals will
+    # return another mock object
+    if isinstance(getattr(tmp, 'func_globals', None), dict):
+        nsdict = tmp.func_globals
     if not attrs:
         original = tmp
         nsdict[obj_name] = mock_obj
