@@ -473,7 +473,9 @@ class Mock(object):
         return self.mock_attrs[attr]
 
     def __setattr__(self, attr, value):
-        if attr in ["mock_raises", "mock_returns", "mock_returns_func", "mock_returns_iter", "mock_returns_func", "show_attrs"]:
+        if attr in ["mock_raises", "mock_returns", "mock_returns_func", "mock_returns_iter", "show_attrs"]:
+            if attr == "mock_returns_iter" and value is not None:
+                value = iter(value)
             object.__setattr__(self, attr, value)
         else:
             if self.mock_show_attrs and self.mock_tracker is not None:
@@ -481,6 +483,34 @@ class Mock(object):
             self.mock_attrs[attr] = value 
 
 __test__ = {
+    "Mock" :
+    r"""
+    Test setting various "mock_" attributes on an existing Mock object.
+
+    >>> m = Mock('mock_obj', tracker=None)
+    >>> m.mock_returns = 42
+    >>> m()
+    42
+    >>> m.mock_returns = None
+    >>> m.mock_returns_func = lambda x: x*x
+    >>> m(3)
+    9
+    >>> m.mock_returns_func = None
+    >>> m.mock_returns_iter = [True, False]
+    >>> m()
+    True
+    >>> m()
+    False
+    >>> m.mock_returns_iter = None
+    >>> m.mock_raises = ValueError
+    >>> try:
+    ...     m()
+    ... except ValueError:
+    ...     pass
+    ... else:
+    ...     raise AssertionError('m() should have raised ValueError')
+    """,
+
     "mock" :
     r"""
     An additional test for mocking a function accessed directly (i.e.
