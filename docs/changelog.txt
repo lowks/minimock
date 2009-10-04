@@ -6,6 +6,8 @@ trunk
 -----
 
 * Deprecate ``MockTracker``. ``TraceTracker`` should be used instead.
+* Support doctest use case (Israel Tsadok)
+* Fix setting mock_returns_iter on existing Mock object (kenmacd)
 
 1.2.4
 -----
