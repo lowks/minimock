@@ -89,14 +89,20 @@ start with ``mock_``, while the constructor arguments don't.
     essence, this function will be the *real* implementation of the
     method.
 
-``mock_raises``:
+``raises``:
     An exception (instance or class) that will be raised when this
     object is called.
 
+``tracker``:
+    An object which is notified every time the mock object is called or
+    an attribute is set on it (assuming ``show_attrs`` is ``True``);
+    defaults to a ``Printer`` to stdout. ``TraceTracker`` can instead be
+    useful for non-doctest tests. Pass ``None`` to disable this behavior.
+
 ``show_attrs``:
-    If this is true, everytime a new attribute is set on the mock
-    object something will be printed.  Otherwise attribute sets are
-    silent, and only function calls print something.
+    If this is true, every time a new attribute is set on the mock
+    object the tracker will be notified. Otherwise attribute sets are
+    silent, and only calls trigger notification.
 
 So to create an object that always raises ValueError, do::
 
