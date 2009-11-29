@@ -1,0 +1,60 @@
+----
+News
+----
+
+trunk
+-----
+
+* Deprecate ``MockTracker``. ``TraceTracker`` should be used instead.
+
+1.2.4
+-----
+* Fix show_attrs=True bug (Kendrick Shaw)
+
+1.2.3
+-----
+
+* Explicitly passing ``tracker=None`` to the ``Mock`` constructor now
+  suppresses tracking. If ``tracker`` is not passed it will still use
+  ``Printer(sys.stdout)`` as before.
+
+1.2.2
+-----
+
+* Added ``MinimockOutputChecker`` which normalizes whitespace in function call
+  traces; ``TraceTracker`` now uses this instead of ``doctest.OutputChecker``
+  (Ben Finney)
+
+1.2.1
+-----
+
+* Allow mocking of built-in functions.
+
+1.2
+---
+
+* Added ``TraceTracker``, a better ``Tracker`` to use with unittests (James Brady)
+
+1.1
+---
+
+* Added ``MockTracker`` for use with unittests rather than doctests (James Brady)
+
+1.0
+---
+
+* Fixed setting special attributes like ``mock_returns`` on
+  already-created Mock objects (Toby White)
+
+* Separated out printing to a class that accepts call information
+  and provided an implementation that prints calls to a file.
+
+0.9
+---
+
+* Added ``show_attrs``
+
+0.8
+---
+
+First official release.
