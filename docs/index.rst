@@ -73,7 +73,7 @@ start with ``mock_``, while the constructor arguments don't.
 
 ``name``:
     The name of the object, used when printing out messages.  In the
-    example about it was ``'smtplib.SMTP'``.
+    example above it was ``'smtplib.SMTP'``.
 
 ``returns``:
     When this object is called, it will return this value.  By default
