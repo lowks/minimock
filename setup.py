@@ -5,8 +5,8 @@ version = '1.2.5'
 
 try:
     doc_dir = os.path.join(os.path.dirname(__file__), 'docs')
-    index = open(os.path.join(doc_dir, 'index.txt')).read()
-    changelog = open(os.path.join(doc_dir, 'changelog.txt')).read()
+    index = open(os.path.join(doc_dir, 'index.rst')).read()
+    changelog = open(os.path.join(doc_dir, 'changelog.rst')).read()
     long_description = '\n'.join((index, changelog))
 except IOError:
     long_description = 'Please see docs/index.txt for more info'
