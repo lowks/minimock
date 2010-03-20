@@ -425,18 +425,19 @@ class Mock(object):
     def __init__(self, name, returns=None, returns_iter=None,
                  returns_func=None, raises=None, show_attrs=False,
                  tracker=DefaultTracker, **kw):
-        object.__setattr__(self, 'mock_name', name)
-        object.__setattr__(self, 'mock_returns', returns)
+        _obsetattr = object.__setattr__
+        _obsetattr(self, 'mock_name', name)
+        _obsetattr(self, 'mock_returns', returns)
         if returns_iter is not None:
             returns_iter = iter(returns_iter)
-        object.__setattr__(self, 'mock_returns_iter', returns_iter)
-        object.__setattr__(self, 'mock_returns_func', returns_func)
-        object.__setattr__(self, 'mock_raises', raises)
-        object.__setattr__(self, 'mock_attrs', kw)
-        object.__setattr__(self, 'mock_show_attrs', show_attrs)
+        _obsetattr(self, 'mock_returns_iter', returns_iter)
+        _obsetattr(self, 'mock_returns_func', returns_func)
+        _obsetattr(self, 'mock_raises', raises)
+        _obsetattr(self, 'mock_attrs', kw)
+        _obsetattr(self, 'mock_show_attrs', show_attrs)
         if tracker is DefaultTracker:
             tracker = Printer(sys.stdout)
-        object.__setattr__(self, 'mock_tracker', tracker)
+        _obsetattr(self, 'mock_tracker', tracker)
 
     def __repr__(self):
         return '<Mock %s %s>' % (hex(id(self)), self.mock_name)
