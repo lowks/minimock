@@ -2,9 +2,10 @@
 News
 ----
 
-trunk
------
+hg tip
+------
 
+* Allow changing the tracker on a mock object once it's been set (James Brady)
 * Deprecate ``MockTracker``. ``TraceTracker`` should be used instead.
 * Support doctest use case (Israel Tsadok)
 * Fix setting mock_returns_iter on existing Mock object (kenmacd)

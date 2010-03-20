@@ -473,8 +473,15 @@ class Mock(object):
         return self.mock_attrs[attr]
 
     def __setattr__(self, attr, value):
-        if attr in ["mock_raises", "mock_returns", "mock_returns_func", "mock_returns_iter", "show_attrs"]:
-            if attr == "mock_returns_iter" and value is not None:
+        if attr in frozenset((
+            'mock_raises',
+            'mock_returns',
+            'mock_returns_func',
+            'mock_returns_iter',
+            'mock_tracker',
+            'show_attrs',
+            )):
+            if attr == 'mock_returns_iter' and value is not None:
                 value = iter(value)
             object.__setattr__(self, attr, value)
         else:
