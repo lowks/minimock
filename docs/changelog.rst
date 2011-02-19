@@ -4,7 +4,10 @@ News
 
 hg tip
 ------
+*
 
+1.2.6
+-----
 * Allow changing the tracker on a mock object once it's been set (James Brady)
 * Support doctest use case (Israel Tsadok)
 * Fix issue 1: setting mock_returns_iter on existing Mock object (kenmacd)
