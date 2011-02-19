@@ -8,6 +8,7 @@ hg tip
 * Allow changing the tracker on a mock object once it's been set (James Brady)
 * Support doctest use case (Israel Tsadok)
 * Fix issue 1: setting mock_returns_iter on existing Mock object (kenmacd)
+* Fix issue 2: static methods become unbound methods after mock + restore
 
 1.2.5
 -----
