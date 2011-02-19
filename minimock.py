@@ -60,9 +60,9 @@ def lookup_by_name(name, nsdicts):
     """
     Look up an object by name from a sequence of namespace dictionaries.
     Returns a tuple of (nsdict, object, attributes); nsdict is the
-    dictionary the name was found in, object is the base object the name is
-    bound to, and the attributes list is the chain of attributes of the
-    object that complete the name.
+    dictionary the name was found in, object is the name of the base object
+    the name is bound to, and the attributes list is the chain of attributes
+    of the object that complete the name.
 
         >>> import os
         >>> nsdict, name, attributes = lookup_by_name("os.path.isdir", 
@@ -196,8 +196,8 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         nsdict[obj_name] = mock_obj
     else:
         for attr in attrs[:-1]:
-            tmp = getattr(tmp, attr)
-        original = getattr(tmp, attrs[-1])
+            tmp = tmp.__dict__[attr]
+        original = tmp.__dict__[attrs[-1]]
         setattr(tmp, attrs[-1], mock_obj)
 
     mocked.append((original, nsdict, obj_name, attrs))
@@ -217,9 +217,8 @@ def restore():
         else:
             tmp = nsdict[name]
             for attr in attrs[:-1]:
-                tmp = getattr(tmp, attr)
+                tmp = tmp.__dict__[attr]
             setattr(tmp, attrs[-1], original)
-    return
 
 def assert_same_trace(tracker, want):
     r"""
