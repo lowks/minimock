@@ -106,7 +106,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
     All additional keyword args are passed on to the Mock object
     initializer.
 
-    An example of how os.path.isfile is replaced:
+    An example of how os.path.isfile is replaced::
 
         >>> import os
         >>> os.path.isfile
@@ -134,11 +134,36 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         >>> isfile_id == id(os.path.isfile)
         True
 
-    Test mocking a built-in function:
+    Test mocking a built-in function::
+
         >>> mock("raw_input", returns="okay")
         >>> raw_input()
         Called raw_input()
         'okay'
+        >>> restore()
+
+    Test mocking and restoring a classmethod and staticmethod::
+
+        >>> class Test(object):
+        ...     @classmethod
+        ...     def cm(cls):
+        ...         return 'cm'
+        ...     @staticmethod
+        ...     def sm():
+        ...         return 'sm'
+        >>> mock('Test.cm', returns='mocked')
+        >>> mock('Test.sm', returns='mocked')
+        >>> Test.cm()
+        Called Test.cm()
+        'mocked'
+        >>> Test.sm()
+        Called Test.sm()
+        'mocked'
+        >>> restore()
+        >>> Test.cm()
+        'cm'
+        >>> Test.sm()
+        'sm'
 
     """
     if nsdicts is None:
