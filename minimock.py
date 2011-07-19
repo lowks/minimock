@@ -59,21 +59,23 @@ mocked = []
 def lookup_by_name(name, nsdicts):
     """
     Look up an object by name from a sequence of namespace dictionaries.
-    Returns a tuple of (nsdict, object, attributes); nsdict is the
-    dictionary the name was found in, object is the name of the base object
-    the name is bound to, and the attributes list is the chain of attributes
-    of the object that complete the name.
+    Returns a tuple of (nsdict, obj_name, attrs); nsdict is the namespace
+    dictionary the name was found in, obj_name is the name of the base object
+    the name is bound to, and the attrs list is the chain of attributes
+    of the object that completes the name.
 
         >>> import os
-        >>> nsdict, name, attributes = lookup_by_name("os.path.isdir", 
+        >>> nsdict, obj_name, attrs = lookup_by_name("os.path.isdir", 
         ...     (locals(),))
-        >>> name, attributes
+        >>> obj_name, attrs
         ('os', ['path', 'isdir'])
-        >>> nsdict, name, attributes = lookup_by_name("os.monkey", (locals(),))
+        >>> getattr(getattr(nsdict[obj_name], attrs[0]), attrs[1])
+        <function isdir at ...>
+        >>> lookup_by_name("os.monkey", (locals(),))
         Traceback (most recent call last):
           ...
         NameError: name 'os.monkey' is not defined
-            
+
     """
     for nsdict in nsdicts:
         attrs = name.split(".")
