@@ -504,7 +504,7 @@ class Mock(object):
             'mock_returns_func',
             'mock_returns_iter',
             'mock_tracker',
-            'show_attrs',
+            'mock_show_attrs',
             )):
             if attr == 'mock_returns_iter' and value is not None:
                 value = iter(value)
@@ -541,6 +541,10 @@ __test__ = {
     ...     pass
     ... else:
     ...     raise AssertionError('m() should have raised ValueError')
+    >>> m.mock_tracker = Printer(sys.stdout)
+    >>> m.mock_show_attrs = True
+    >>> m.a = 2
+    Set mock_obj.a = 2
     """,
 
     "mock" :

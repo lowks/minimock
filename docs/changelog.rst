@@ -4,7 +4,9 @@ News
 
 hg tip
 ------
-*
+* bugfix: ``mock_show_attrs`` was immutable after initialization because the
+  ``mock_`` prefix was accidentally left off in ``Mock.__setattr__`` (Yusuke
+  Muraoka)
 
 1.2.6
 -----
