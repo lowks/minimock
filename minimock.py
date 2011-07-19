@@ -167,6 +167,22 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         >>> Test.sm()
         'sm'
 
+    Test mocking a proxy object::
+
+        >>> class Proxy(object):
+        ...     def __init__(self, obj):
+        ...         self._obj = obj
+        ...     def __getattr__(self, name):
+        ...         return getattr(self._obj, name)
+        >>> import os
+        >>> os = Proxy(os)
+        >>> os.path.isfile
+        <function isfile at ...>
+        >>> mock('os.path.isfile')
+        >>> os.path.isfile
+        <Mock ... os.path.isfile>
+        >>> restore()
+
     """
     if nsdicts is None:
         stack = inspect.stack()
@@ -198,8 +214,14 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         nsdict[obj_name] = mock_obj
     else:
         for attr in attrs[:-1]:
-            tmp = tmp.__dict__[attr]
-        original = tmp.__dict__[attrs[-1]]
+            try:
+                tmp = tmp.__dict__[attr]
+            except KeyError:
+                tmp = getattr(tmp, attr)
+        try:
+            original = tmp.__dict__[attrs[-1]]
+        except KeyError:
+            original = getattr(tmp, attrs[-1])
         setattr(tmp, attrs[-1], mock_obj)
 
     mocked.append((original, nsdict, obj_name, attrs))
@@ -219,7 +241,10 @@ def restore():
         else:
             tmp = nsdict[name]
             for attr in attrs[:-1]:
-                tmp = tmp.__dict__[attr]
+                try:
+                    tmp = tmp.__dict__[attr]
+                except KeyError:
+                    tmp = getattr(tmp, attr)
             setattr(tmp, attrs[-1], original)
 
 def assert_same_trace(tracker, want):
