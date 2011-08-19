@@ -2,6 +2,10 @@
 News
 ----
 
+hg tip
+------
+*
+
 1.2.7
 -----
 * Fix for mocking proxy objects. Worked in 1.2.5 but broken in 1.2.6 by the
