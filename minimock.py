@@ -37,7 +37,6 @@ got.  We've provided fake return calls (for the ``smtplib.SMTP()``
 constructor).  These are all the core parts of a mock library.  The
 implementation is simple because most of the work is done by doctest.
 """
-from __future__ import print_function
 
 __all__ = ["mock", "restore", "Mock", "TraceTracker", "assert_same_trace"]
 
@@ -48,11 +47,11 @@ import re
 import textwrap
 
 try:
-    # for Python 3
+    # for Python 2.6 or later
     import __builtin__ as builtins
     from StringIO import StringIO
 except ImportError:
-    # for Python 2.6 or later
+    # for Python 3
     import builtins
     from io import StringIO
 
@@ -302,11 +301,11 @@ class Printer(AbstractTracker):
         parts = [repr(a) for a in args]
         parts.extend(
             '%s=%r' % (items) for items in sorted(kw.items()))
-        msg = 'Called %s(%s)' % (func_name, ', '.join(parts))
+        msg = 'Called %s(%s)\n' % (func_name, ', '.join(parts))
         if len(msg) > 80:
-            msg = 'Called %s(\n    %s)' % (
+            msg = 'Called %s(\n    %s)\n' % (
                 func_name, ',\n    '.join(parts))
-        print(msg, file=self.file)
+        self.file.write(msg)
 
     def set(self, obj_name, attr, value): 
         """
@@ -314,7 +313,7 @@ class Printer(AbstractTracker):
         >>> z.a = 2
         Set z.a = 2
         """
-        print('Set %s.%s = %r' % (obj_name, attr, value), file=self.file)
+        self.file.write('Set %s.%s = %r\n' % (obj_name, attr, value))
         
 class TraceTracker(Printer):
     """
