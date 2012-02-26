@@ -49,7 +49,10 @@ import textwrap
 try:
     # for Python 2.6 or later
     import __builtin__ as builtins
-    from StringIO import StringIO
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
 except ImportError:
     # for Python 3
     import builtins
