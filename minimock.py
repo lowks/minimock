@@ -47,17 +47,23 @@ import re
 import textwrap
 
 try:
-    # for Python 2.6 or later
+    import builtins
+except ImportError:
+    # python < 3
     import __builtin__ as builtins
     try:
         from cStringIO import StringIO
     except ImportError:
         from StringIO import StringIO
-except ImportError:
-    # for Python 3
-    import builtins
+else:
+    # python 3
     from io import StringIO
-
+try:
+    next
+except NameError:
+    # python < 2.6
+    def next(x):
+        return x.next()
 
 # A list of mocked objects. Each item is a tuple of (original object,
 # namespace dict, object name, and a list of object attributes).
