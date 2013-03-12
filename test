@@ -1,0 +1,4 @@
+#!/bin/sh
+
+NOSE_WITH_DOCTEST=t NOSE_DOCTEST_EXTENSION=txt nosetests -v
+NOSE_WITH_DOCTEST=t NOSE_DOCTEST_EXTENSION=rst nosetests -v docs
