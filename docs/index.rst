@@ -43,6 +43,7 @@ Here's an example of something we might test, a simple email sender::
 Now we want to make a mock ``smtplib.SMTP`` object.  We'll have to
 inject our mock into the ``smtplib`` module::
 
+    >>> from minimock import Mock
     >>> smtplib.SMTP = Mock('smtplib.SMTP')
     >>> smtplib.SMTP.mock_returns = Mock('smtp_connection')
 
