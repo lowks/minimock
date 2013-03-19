@@ -4,7 +4,12 @@ News
 
 hg tip
 ------
-*
+
+* (note not-yet-released changes here)
+
+1.2.8
+-----
+* python3 (+ tox) support! (Marc Abramowitz)
 
 1.2.7
 -----
