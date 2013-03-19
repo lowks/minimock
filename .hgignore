@@ -4,3 +4,4 @@ MiniMock.egg-info
 dist
 *.swp
 *.un~
+.tox
