@@ -83,7 +83,7 @@ def lookup_by_name(name, nsdicts):
         ...     (locals(),))
         >>> obj_name, attrs
         ('os', ['path', 'isdir'])
-        >>> getattr(getattr(nsdict[obj_name], attrs[0]), attrs[1])
+        >>> getattr(getattr(nsdict[obj_name], attrs[0]), attrs[1])  # doctest: +ELLIPSIS
         <function isdir at ...>
         >>> lookup_by_name("os.monkey", (locals(),))
         Traceback (most recent call last):
@@ -125,11 +125,11 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
     An example of how os.path.isfile is replaced::
 
         >>> import os
-        >>> os.path.isfile
+        >>> os.path.isfile  # doctest: +ELLIPSIS
         <function isfile at ...>
         >>> isfile_id = id(os.path.isfile)
         >>> mock("os.path.isfile", returns=True)
-        >>> os.path.isfile
+        >>> os.path.isfile  # doctest: +ELLIPSIS
         <Mock ... os.path.isfile>
         >>> os.path.isfile("/foo/bar/baz")
         Called os.path.isfile('/foo/bar/baz')
@@ -145,7 +145,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         >>> mock_id != id(os.path.isfile)
         True
         >>> restore()
-        >>> os.path.isfile
+        >>> os.path.isfile  # doctest: +ELLIPSIS
         <function isfile at ...>
         >>> isfile_id == id(os.path.isfile)
         True
@@ -194,10 +194,10 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
         ...         return getattr(self._obj, name)
         >>> import os
         >>> os = Proxy(os)
-        >>> os.path.isfile
+        >>> os.path.isfile  # doctest: +ELLIPSIS
         <function isfile at ...>
         >>> mock('os.path.isfile')
-        >>> os.path.isfile
+        >>> os.path.isfile  # doctest: +ELLIPSIS
         <Mock ... os.path.isfile>
         >>> restore()
 
@@ -282,7 +282,7 @@ def assert_same_trace(tracker, want):
             >>> m.some_meth('dummy argument')
             >>> assert_same_trace(tt,
             ...     "Called mock_obj.some_meth('dummy argument')\n")
-            >>> assert_same_trace(tt, "Non-matching trace")
+            >>> assert_same_trace(tt, "Non-matching trace")  # doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...
             AssertionError...
