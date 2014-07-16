@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '1.2.8-dev'
+version = '1.2.9-dev'
 
 try:
     from os.path import join, dirname
@@ -9,7 +9,7 @@ try:
     changelog = open(join(doc_dir, 'changelog.rst')).read()
     long_description = '\n'.join((index, changelog))
 except IOError:
-    long_description = 'Please see docs/index.rst for more info'
+    long_description = 'Please see https://bitbucket.org/jab/minimock for more info'
 
 setup(
     name='MiniMock',
@@ -32,7 +32,7 @@ setup(
     author_email='ianb@colorstudy.com',
     maintainer='Josh Bronson',
     maintainer_email='jabronson@gmail.com',
-    url='http://pypi.python.org/pypi/MiniMock',
+    url='https://bitbucket.org/jab/minimock',
     license='MIT',
     py_modules=['minimock'],
     zip_safe=True,
