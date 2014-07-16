@@ -4,9 +4,9 @@ MiniMock
 ..  contents::
     :depth: 1
 
---------------------
-License & Repository
---------------------
+-----------------------
+License & Collaboration
+-----------------------
 
 MiniMock is by `Ian Bicking <http://ianbicking.org>`_ with
 substantial contributions by Mike Beachy, and is maintained by Josh
@@ -18,7 +18,6 @@ which you can clone with ``hg clone https://bitbucket.org/jab/minimock/``,
 download an archive of the tip from
 `https://bitbucket.org/jab/minimock/get/tip.gz
 <https://bitbucket.org/jab/minimock/get/tip.gz#egg=MiniMock-dev>`_,
-or install from with ``easy_install MiniMock==dev``.
 There is also a `Google Group <https://groups.google.com/group/minimock-dev>`_
 for the development mailing list which can be emailed at
 `minimock-dev@googlegroups.com <mailto:minimock-dev@googlegroups.com>`_.
