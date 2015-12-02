@@ -1,14 +1,13 @@
 from setuptools import setup
 
-version = '1.2.9-dev'
+version = '1.2.9.dev0'
 
 try:
     from os.path import join, dirname
-    doc_dir = join(dirname(__file__), 'docs')
-    index = open(join(doc_dir, 'index.rst')).read()
-    changelog = open(join(doc_dir, 'changelog.rst')).read()
-    long_description = '\n'.join((index, changelog))
-except IOError:
+    readme = open('README.rst').read()
+    changelog = open('CHANGELOG.rst').read()
+    long_description = '\n'.join((readme, changelog))
+except:
     long_description = 'Please see https://bitbucket.org/jab/minimock for more info'
 
 setup(
@@ -30,8 +29,8 @@ setup(
     keywords='mock testing unittest',
     author='Ian Bicking',
     author_email='ianb@colorstudy.com',
-    maintainer='Josh Bronson',
-    maintainer_email='jabronson@gmail.com',
+    maintainer='Low Kian Seong',
+    maintainer_email='kianseong@gmail.com',
     url='https://bitbucket.org/jab/minimock',
     license='MIT',
     py_modules=['minimock'],
