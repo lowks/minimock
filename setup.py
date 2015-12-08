@@ -31,7 +31,7 @@ setup(
     author_email='ianb@colorstudy.com',
     maintainer='Low Kian Seong',
     maintainer_email='kianseong@gmail.com',
-    url='https://bitbucket.org/jab/minimock',
+    url='https://github.com/lowks/minimock',
     license='MIT',
     py_modules=['minimock'],
     zip_safe=True,
