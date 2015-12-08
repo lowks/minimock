@@ -8,7 +8,7 @@ try:
     changelog = open('CHANGELOG.rst').read()
     long_description = '\n'.join((readme, changelog))
 except:
-    long_description = 'Please see https://bitbucket.org/jab/minimock for more info'
+    long_description = 'Please see https://github.com/lowks/minimock for more info'
 
 setup(
     name='MiniMock',

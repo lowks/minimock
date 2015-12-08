@@ -11,10 +11,10 @@ License & Collaboration
 MiniMock is by `Ian Bicking <http://ianbicking.org>`_ with
 substantial contributions by Mike Beachy, and is maintained by
 Low Kian Seong. It is licensed under an `MIT-style license
-<https://bitbucket.org/jab/minimock/src/tip/LICENSE.txt>`_.
+<https://github.com/lowks/minimock/blob/master/LICENSE.txt>`_.
 
-It has a `bitbucket repository <https://bitbucket.org/jab/minimock/>`_
-which you can clone with ``hg clone https://bitbucket.org/jab/minimock/``.
+It has a `github repository <https://github.com/lowks/minimock/>`_
+which you can clone with ``git clone https://github.com/lowks/minimock.git``.
 There is also a `Google Group <https://groups.google.com/group/minimock-dev>`_
 for the development mailing list which can be emailed at
 `minimock-dev@googlegroups.com <mailto:minimock-dev@googlegroups.com>`_.
