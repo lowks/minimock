@@ -1,7 +1,0 @@
-syntax:glob
-*.pyc
-MiniMock.egg-info
-dist
-*.swp
-*.un~
-.tox
