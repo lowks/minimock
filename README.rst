@@ -3,6 +3,11 @@ MiniMock
 
 ..  contents::
     :depth: 1
+    
+.. image::
+    https://secure.travis-ci.org/lowks/minimock.png?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/lowks/minimock
 
 -----------------------
 License & Collaboration
