@@ -8,7 +8,7 @@ try:
     changelog = open('CHANGELOG.rst').read()
     long_description = '\n'.join((readme, changelog))
 except:
-    long_description = 'Please see https://github.com/lowks/minimock for more info'
+    long_description = 'See https://github.com/lowks/minimock for more info'
 
 setup(
     name='MiniMock',
@@ -25,7 +25,7 @@ setup(
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        ],
+    ],
     keywords='mock testing unittest',
     author='Ian Bicking',
     author_email='ianb@colorstudy.com',
@@ -35,4 +35,4 @@ setup(
     license='MIT',
     py_modules=['minimock'],
     zip_safe=True,
-    )
+)

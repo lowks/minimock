@@ -38,7 +38,7 @@ constructor).  These are all the core parts of a mock library.  The
 implementation is simple because most of the work is done by doctest.
 """
 
-__all__ = ["mock", "restore", "Mock", "TraceTracker", "assert_same_trace"]
+__all__ = ("mock", "restore", "Mock", "TraceTracker", "assert_same_trace")
 
 import sys
 import inspect
