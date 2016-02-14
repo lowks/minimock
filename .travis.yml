@@ -1,0 +1,15 @@
+sudo: false
+language: python
+python: 3.5 
+env:
+  - TOXENV=py26
+  - TOXENV=py27
+  # - TOXENV=py32
+  - TOXENV=py33
+  - TOXENV=py34
+install: pip install tox
+script: tox
+cache:
+  directories:
+    - .tox
+    - $HOME/.cache/pip
