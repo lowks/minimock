@@ -70,6 +70,7 @@ except NameError:
 #
 mocked = []
 
+
 def lookup_by_name(name, nsdicts):
     """
     Look up an object by name from a sequence of namespace dictionaries.
@@ -79,7 +80,7 @@ def lookup_by_name(name, nsdicts):
     of the object that completes the name.
 
         >>> import os
-        >>> nsdict, obj_name, attrs = lookup_by_name("os.path.isdir", 
+        >>> nsdict, obj_name, attrs = lookup_by_name("os.path.isdir",
         ...     (locals(),))
         >>> obj_name, attrs
         ('os', ['path', 'isdir'])
@@ -111,6 +112,7 @@ def lookup_by_name(name, nsdicts):
                     return nsdict, obj_name, attrs
 
     raise NameError("name '%s' is not defined" % name)
+
 
 def mock(name, nsdicts=None, mock_obj=None, **kw):
     """
@@ -244,6 +246,7 @@ def mock(name, nsdicts=None, mock_obj=None, **kw):
 
     mocked.append((original, nsdict, obj_name, attrs))
 
+
 def restore():
     """
     Restore all mocked objects.
@@ -265,18 +268,19 @@ def restore():
                     tmp = getattr(tmp, attr)
             setattr(tmp, attrs[-1], original)
 
+
 def assert_same_trace(tracker, want):
     r"""
     Check that the mock objects using ``tracker`` have been used as expected.
-    
+
     :param tracker: a :class:`TraceTracker` instance
     :param want: the expected :class:`Printer` output
     :type want: string
     :raises: :exc:`AssertionError` if the expected and observed outputs don't
         match
-    
+
     Example::
-    
+
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('dummy argument')
@@ -288,7 +292,8 @@ def assert_same_trace(tracker, want):
             AssertionError...
     """
     assert tracker.check(want), tracker.diff(want)
-    
+
+
 class AbstractTracker(object):
     def __init__(self, *args, **kw):
         raise NotImplementedError
@@ -298,6 +303,7 @@ class AbstractTracker(object):
 
     def set(self, *args, **kw):
         raise NotImplementedError
+
 
 class Printer(AbstractTracker):
     """Prints all calls to the file it's instantiated with.
@@ -316,14 +322,15 @@ class Printer(AbstractTracker):
                 func_name, ',\n    '.join(parts))
         self.file.write(msg)
 
-    def set(self, obj_name, attr, value): 
+    def set(self, obj_name, attr, value):
         """
         >>> z = Mock('z', show_attrs=True)
         >>> z.a = 2
         Set z.a = 2
         """
         self.file.write('Set %s.%s = %r\n' % (obj_name, attr, value))
-        
+
+
 class TraceTracker(Printer):
     """
     :class:`AbstractTracker` implementation for using MiniMock in non-
@@ -335,22 +342,22 @@ class TraceTracker(Printer):
         self.out = StringIO()
         super(TraceTracker, self).__init__(self.out, *args, **kw)
         self.checker = MinimockOutputChecker()
-        self.options =  doctest.ELLIPSIS
+        self.options = doctest.ELLIPSIS
         self.options |= doctest.NORMALIZE_INDENTATION
         self.options |= doctest.NORMALIZE_FUNCTION_PARAMETERS
         self.options |= doctest.REPORT_UDIFF
-        
+
     def check(self, want):
         r"""
         Compare observed MiniMock usage with that which we expected.
-        
+
         :param want: the :class:`Printer` output that results from expected
             usage of mocked objects
         :type want: string
         :rtype: a ``True`` value if the check passed, ``False`` otherwise
-        
+
         Example::
-        
+
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('arg1')
@@ -363,20 +370,20 @@ class TraceTracker(Printer):
         """
         return self.checker.check_output(want, self.dump(),
             optionflags=self.options)
-        
+
     def diff(self, want):
         r"""
         Analyse differences between observed MiniMock usage and that which
         we expected, if any.
-        
+
         :param want: the :class:`Printer` output that results from expected
             usage of mocked objects
         :type want: string
         :rtype: a string summary of differences between the observed usage and
             the ``want`` parameter
-        
+
         Example::
-        
+
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('dummy argument')
@@ -392,13 +399,13 @@ class TraceTracker(Printer):
         else:
             return self.checker.output_difference(doctest.Example("", want),
                 self.dump(), optionflags=self.options)
-        
+
     def dump(self):
         r"""
         Return the MiniMock object usage so far.
-        
+
         Example::
-        
+
             >>> tt = TraceTracker()
             >>> m = Mock('mock_obj', tracker=tt)
             >>> m.some_meth('dummy argument')
@@ -434,7 +441,7 @@ def normalize_function_parameters(text):
           are separated by a single space ' '.
 
     Example::
-        
+
         >>> tt = TraceTracker()
         >>> foo = Mock("foo", tracker=tt)
         >>> expect_mock_output = '''\
@@ -493,6 +500,7 @@ class _DefaultTracker(object):
         return '(default tracker)'
 DefaultTracker = _DefaultTracker()
 del _DefaultTracker
+
 
 class Mock(object):
 
@@ -555,17 +563,17 @@ class Mock(object):
             'mock_returns_iter',
             'mock_tracker',
             'mock_show_attrs',
-            )):
+        )):
             if attr == 'mock_returns_iter' and value is not None:
                 value = iter(value)
             object.__setattr__(self, attr, value)
         else:
             if self.mock_show_attrs and self.mock_tracker is not None:
                 self.mock_tracker.set(self.mock_name, attr, value)
-            self.mock_attrs[attr] = value 
+            self.mock_attrs[attr] = value
 
 __test__ = {
-    "Mock" :
+    "Mock":
     r"""
     Test setting various "mock_" attributes on an existing Mock object.
 
@@ -597,7 +605,7 @@ __test__ = {
     Set mock_obj.a = 2
     """,
 
-    "mock" :
+    "mock":
     r"""
     An additional test for mocking a function accessed directly (i.e.
     not via object attributes).
