@@ -2,10 +2,30 @@
 News
 ----
 
-hg tip
-------
+1.2.9.dev0
+----------
 
-* (note not-yet-released changes here)
+New
+~~~
+- pkg: add initial conda recipe and workflow (plus .gitattributes)
+  [Stephen L Arnold]
+- Add some flake8 cleanup and tool cfgs. [Stephen L Arnold]
+
+
+Changes
+~~~~~~~
+- Use nose wth coverage and detailed-errors for smoke test. [Stephen L
+  Arnold]
+
+Fix
+~~~
+- Replace os.path.isfile in lookup_by_name (fails on windows <py38)
+  [Stephen L Arnold]
+
+Other
+~~~~~
+- cleanup python/pkg versions, update tox cfg, switch CI [Stephen L
+  Arnold]
 
 1.2.8
 -----

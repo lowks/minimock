@@ -1,24 +1,22 @@
 MiniMock
 ========
+|ci| |conda| |release| |python|
+
+|tag| |cov| |license| |climate| |reqs|
 
 ..  contents::
     :depth: 1
-
-.. image::
-    https://secure.travis-ci.org/lowks/minimock.png?branch=master
-    :alt: Build Status
-    :target: https://travis-ci.org/lowks/minimock
 
 -----------------------
 License & Collaboration
 -----------------------
 
-MiniMock is by `Ian Bicking <http://ianbicking.org>`_ with
+MiniMock is originall by `Ian Bicking <http://ianbicking.org>`_ with
 substantial contributions by Mike Beachy, and is maintained by
 Low Kian Seong. It is licensed under an `MIT-style license
-<https://github.com/lowks/minimock/blob/master/LICENSE.txt>`_.
+<https://github.com/sarnold/minimock/blob/master/LICENSE.txt>`_.
 
-It has a `github repository <https://github.com/lowks/minimock/>`_
+It has a `github repository <https://github.com/sarnold/minimock/>`_
 which you can clone with ``git clone https://github.com/lowks/minimock.git``.
 There is also a `Google Group <https://groups.google.com/group/minimock-dev>`_
 for the development mailing list which can be emailed at
@@ -147,3 +145,41 @@ proper modules first.  Alternately you can pass in a dictionary like
 To restore all the objects mocked with ``mock()``, use
 ``minimock.restore()`` (with no arguments; all the mocks are kept
 track of).
+
+
+.. |ci| image:: https://github.com/sarnold/minimock/workflows/Smoke/badge.svg
+    :target: https://github.com/sarnold/minimock/actions?query=workflow:Smoke
+    :alt: CI Status
+
+.. |conda| image:: https://github.com/sarnold/minimock/workflows/Conda/badge.svg
+    :target: https://github.com/sarnold/minimock/actions?query=workflow:Conda
+    :alt: Conda Status
+
+.. |release| image:: https://github.com/sarnold/minimock/workflows/Release/badge.svg
+    :target: https://github.com/sarnold/minimock/actions?query=workflow:Release
+    :alt: Release Status
+
+.. |climate| image:: https://img.shields.io/codeclimate/maintainability/sarnold/minimock
+    :target: https://codeclimate.com/github/sarnold/minimock
+    :alt: Maintainability
+
+.. |license| image:: https://img.shields.io/github/license/sarnold/minimock
+    :target: https://github.com/sarnold/minimock/blob/master/LICENSE.txt
+    :alt: License
+
+.. |tag| image:: https://img.shields.io/github/v/tag/sarnold/minimock?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/sarnold/minimock/releases
+    :alt: GitHub tag (latest SemVer, including pre-release)
+
+.. |cov| image:: https://img.shields.io/codecov/c/github/sarnold/minimock
+    :target: https://codecov.io/gh/sarnold/minimock
+    :alt: Codecov
+
+.. |python| image:: https://img.shields.io/badge/python-3.6+-blue.svg
+    :target: https://www.python.org/downloads/
+    :alt: Python
+
+.. |reqs| image:: https://requires.io/github/sarnold/minimock/requirements.svg?branch=master
+    :target: https://requires.io/github/sarnold/minimock/requirements/?branch=master
+    :alt: Requirements Status
+

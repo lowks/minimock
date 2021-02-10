@@ -1,0 +1,41 @@
+{% set name = "MiniMock" %}
+{% set version = "1.2.9" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+
+test:
+  imports:
+    - {{ name|lower }}
+  requires:
+    - pip
+  commands:
+    - python -m pip check
+    - python -m doctest minimock.py
+
+about:
+  home: https://github.com/lowks/minimock
+  license: MIT
+  license_family: MIT
+  license_file: ../LICENSE.txt
+  summary: The simplest possible mock library
+
+extra:
+  recipe-maintainers:
+    - sarnold

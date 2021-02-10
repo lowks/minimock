@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    # release on tag push
+    tags:
+      - '*'
+
+jobs:
+  create_release:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Get version
+        id: get_version
+        run: |
+          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+          echo ${{ env.VERSION }}
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.7
+
+      - name: Install gitchangelog
+        run: |
+          python -m pip install https://github.com/freepn/gitchangelog/archive/3.0.5.tar.gz
+
+      - name: Generate changes file
+        run: |
+          export GITCHANGELOG_CONFIG_FILENAME=$(get-rcpath)
+          bash -c 'gitchangelog $(git tag --sort=taggerdate | tail -n2 | head -n1)..${{ env.VERSION }} > CHANGES.md'
+
+      - name: Create draft release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          body_path: CHANGES.md
+          draft: false
+          prerelease: false
