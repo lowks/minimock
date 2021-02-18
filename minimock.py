@@ -40,7 +40,7 @@ implementation is simple because most of the work is done by doctest.
 
 __all__ = ("mock", "restore", "Mock", "TraceTracker", "assert_same_trace")
 
-__version__ = '1.2.9'
+__version__ = '1.2.10.dev0'  # note: also bump version in conda/meta.yaml
 
 import sys
 import inspect

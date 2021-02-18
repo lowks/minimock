@@ -1,5 +1,5 @@
 {% set name = "MiniMock" %}
-{% set version = "1.2.9" %}
+{% set version = "1.2.10.dev0" %}
 
 package:
   name: {{ name|lower }}
