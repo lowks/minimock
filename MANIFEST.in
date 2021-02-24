@@ -1,3 +1,2 @@
-include README.rst
-include CHANGELOG.txt
-include LICENSE.txt
+include README.rst CHANGELOG.txt LICENSE.txt
+include pyproject.toml setup.py setup.cfg

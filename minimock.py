@@ -40,6 +40,8 @@ implementation is simple because most of the work is done by doctest.
 
 __all__ = ("mock", "restore", "Mock", "TraceTracker", "assert_same_trace")
 
+__version__ = '1.2.10.dev0'  # note: also bump version in conda/meta.yaml
+
 import sys
 import inspect
 import doctest
@@ -48,7 +50,7 @@ import textwrap
 
 try:
     import builtins
-except ImportError:
+except ImportError:  # pragma: PY2
     # python < 3
     import __builtin__ as builtins
     try:
@@ -58,12 +60,7 @@ except ImportError:
 else:
     # python 3
     from io import StringIO
-try:
-    next
-except NameError:
-    # python < 2.6
-    def next(x):
-        return x.next()
+
 
 # A list of mocked objects. Each item is a tuple of (original object,
 # namespace dict, object name, and a list of object attributes).
@@ -80,12 +77,12 @@ def lookup_by_name(name, nsdicts):
     of the object that completes the name.
 
         >>> import os
-        >>> nsdict, obj_name, attrs = lookup_by_name("os.path.isdir",
+        >>> nsdict, obj_name, attrs = lookup_by_name("os.path.basename",
         ...     (locals(),))
         >>> obj_name, attrs
-        ('os', ['path', 'isdir'])
+        ('os', ['path', 'basename'])
         >>> getattr(getattr(nsdict[obj_name], attrs[0]), attrs[1])  # doctest: +ELLIPSIS
-        <function isdir at ...>
+        <function basename at ...>
         >>> lookup_by_name("os.monkey", (locals(),))
         Traceback (most recent call last):
           ...
@@ -369,7 +366,7 @@ class TraceTracker(Printer):
             False
         """
         return self.checker.check_output(want, self.dump(),
-            optionflags=self.options)
+                                         optionflags=self.options)
 
     def diff(self, want):
         r"""
@@ -398,7 +395,8 @@ class TraceTracker(Printer):
             return ''
         else:
             return self.checker.output_difference(doctest.Example("", want),
-                self.dump(), optionflags=self.options)
+                                                  self.dump(),
+                                                  optionflags=self.options)
 
     def dump(self):
         r"""
@@ -464,7 +462,7 @@ def normalize_function_parameters(text):
         re.compile(r"\(\s+(\S)"): r"(\1",
         re.compile(r"(\S)\s+\)"): r"\1)",
         re.compile(r",\s*(\S)"): r", \1",
-        }
+    }
     for search_pattern, replace_pattern in normalize_map.items():
         normalized_text = re.sub(
             search_pattern, replace_pattern, normalized_text)
@@ -498,6 +496,8 @@ class MinimockOutputChecker(doctest.OutputChecker, object):
 class _DefaultTracker(object):
     def __repr__(self):
         return '(default tracker)'
+
+
 DefaultTracker = _DefaultTracker()
 del _DefaultTracker
 
@@ -551,8 +551,8 @@ class Mock(object):
             else:
                 new_name = attr
             self.mock_attrs[attr] = Mock(new_name,
-                show_attrs=self.mock_show_attrs,
-                tracker=self.mock_tracker)
+                                         show_attrs=self.mock_show_attrs,
+                                         tracker=self.mock_tracker)
         return self.mock_attrs[attr]
 
     def __setattr__(self, attr, value):
@@ -571,6 +571,7 @@ class Mock(object):
             if self.mock_show_attrs and self.mock_tracker is not None:
                 self.mock_tracker.set(self.mock_name, attr, value)
             self.mock_attrs[attr] = value
+
 
 __test__ = {
     "Mock":

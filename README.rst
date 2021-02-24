@@ -1,20 +1,18 @@
 MiniMock
 ========
+|ci| |conda| |release| |python|
+
+|tag| |cov| |license| |climate| |reqs|
 
 ..  contents::
     :depth: 1
-
-.. image::
-    https://secure.travis-ci.org/lowks/minimock.png?branch=master
-    :alt: Build Status
-    :target: https://travis-ci.org/lowks/minimock
 
 -----------------------
 License & Collaboration
 -----------------------
 
-MiniMock is by `Ian Bicking <http://ianbicking.org>`_ with
-substantial contributions by Mike Beachy, and is maintained by
+MiniMock's original author was `Ian Bicking <http://ianbicking.org>`_
+with substantial contributions by Mike Beachy, and is maintained by
 Low Kian Seong. It is licensed under an `MIT-style license
 <https://github.com/lowks/minimock/blob/master/LICENSE.txt>`_.
 
@@ -147,3 +145,41 @@ proper modules first.  Alternately you can pass in a dictionary like
 To restore all the objects mocked with ``mock()``, use
 ``minimock.restore()`` (with no arguments; all the mocks are kept
 track of).
+
+
+.. |ci| image:: https://github.com/lowks/minimock/workflows/Smoke/badge.svg
+    :target: https://github.com/lowks/minimock/actions?query=workflow:Smoke
+    :alt: CI Status
+
+.. |conda| image:: https://github.com/lowks/minimock/workflows/Conda/badge.svg
+    :target: https://github.com/lowks/minimock/actions?query=workflow:Conda
+    :alt: Conda Status
+
+.. |release| image:: https://github.com/lowks/minimock/workflows/Release/badge.svg
+    :target: https://github.com/lowks/minimock/actions?query=workflow:Release
+    :alt: Release Status
+
+.. |climate| image:: https://img.shields.io/codeclimate/maintainability/lowks/minimock
+    :target: https://codeclimate.com/github/lowks/minimock
+    :alt: Maintainability
+
+.. |license| image:: https://img.shields.io/github/license/lowks/minimock
+    :target: https://github.com/lowks/minimock/blob/master/LICENSE.txt
+    :alt: License
+
+.. |tag| image:: https://img.shields.io/github/v/tag/lowks/minimock?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/lowks/minimock/releases
+    :alt: GitHub tag (latest SemVer, including pre-release)
+
+.. |cov| image:: https://img.shields.io/codecov/c/github/lowks/minimock
+    :target: https://codecov.io/gh/lowks/minimock
+    :alt: Codecov
+
+.. |python| image:: https://img.shields.io/badge/python-3.6+-blue.svg
+    :target: https://www.python.org/downloads/
+    :alt: Python
+
+.. |reqs| image:: https://requires.io/github/lowks/minimock/requirements.svg?branch=master
+    :target: https://requires.io/github/lowks/minimock/requirements/?branch=master
+    :alt: Requirements Status
+
