@@ -104,6 +104,11 @@ start with ``mock_``, while the constructor arguments don't.
     object the tracker will be notified. Otherwise attribute sets are
     silent, and only calls trigger notification.
 
+``copy_signature_of``:
+    If given, the function or object signature will be copied to the
+    mock object. This can be useful when testing codes that rely
+    on metaprogramming.
+
 So to create an object that always raises ValueError, do::
 
     >>> dummy_module = Mock('mylibrary')
