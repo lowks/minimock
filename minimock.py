@@ -36,6 +36,9 @@ on the object.  We've also tested the arguments that the mock object
 got.  We've provided fake return calls (for the ``smtplib.SMTP()``
 constructor).  These are all the core parts of a mock library.  The
 implementation is simple because most of the work is done by doctest.
+
+    >>> restore()
+
 """
 
 __all__ = ("mock", "restore", "Mock", "TraceTracker", "assert_same_trace")
@@ -213,13 +216,11 @@ def mock(name, nsdicts=None, mock_obj=None, copy_signature=False, **kw):
 
     nsdict, obj_name, attrs = lookup_by_name(name, nsdicts)
 
+    if mock_obj is None:
+        mock_obj = Mock(name, **kw)
+
     # Get the original object and replace it with the mock object.
     tmp = nsdict[obj_name]
-
-    if mock_obj is None:
-        if copy_signature:
-            kw['copy_signature_of'] = kw.get('copy_signature_of', tmp)
-        mock_obj = Mock(name, **kw)
 
     # if run from a doctest, nsdict may point to a *copy* of the
     # global namespace, so instead use tmp.func_globals if present.
@@ -242,6 +243,9 @@ def mock(name, nsdicts=None, mock_obj=None, copy_signature=False, **kw):
         except KeyError:
             original = getattr(tmp, attrs[-1])
         setattr(tmp, attrs[-1], mock_obj)
+
+    if copy_signature:
+        mock_obj.mock_signature = original
 
     mocked.append((original, nsdict, obj_name, attrs))
 
@@ -524,7 +528,7 @@ class Mock(object):
         _obsetattr(self, 'mock_tracker', tracker)
         if copy_signature_of is not None:
             signature = inspect.signature(copy_signature_of)
-            setattr(self, '__signature__', signature)
+            _obsetattr(self, '__signature__', signature)
 
     def __repr__(self):
         return '<Mock %s %s>' % (hex(id(self)), self.mock_name)
@@ -568,9 +572,13 @@ class Mock(object):
             'mock_returns_iter',
             'mock_tracker',
             'mock_show_attrs',
+            'mock_signature'
         )):
             if attr == 'mock_returns_iter' and value is not None:
                 value = iter(value)
+            elif attr == 'mock_signature':
+                attr = '__signature__'
+                value = inspect.signature(value)
             object.__setattr__(self, attr, value)
         else:
             if self.mock_show_attrs and self.mock_tracker is not None:
@@ -657,6 +665,18 @@ __test__ = {
     <Mock 0x... send_email>
     >>> inspect.signature(send_email)
     <Signature (from_addr, to_addr, subject, body)>
+    >>> restore()
+
+    Works with objects defined outside module.
+
+    >>> import os
+    >>> inspect.signature(os.path.join) # doctest: +ELLIPSIS
+    <Signature (path, *paths)>
+    >>> mock("os.path.join", copy_signature=True)
+    >>> os.path.join # doctest: +ELLIPSIS
+    <Mock 0x... os.path.join>
+    >>> inspect.signature(os.path.join)
+    <Signature (path, *paths)>
     >>> restore()
 
     """,
